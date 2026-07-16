@@ -1,0 +1,42 @@
+<mxfile host="Electron">
+  <diagram name="Página-1" id="b1GOWPL6YNx1U61K0lMm">
+    <mxGraphModel dx="1414" dy="768" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-9" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="&lt;ul&gt;&lt;li&gt;&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="146.88" width="146.88" x="434.5" y="593.12" as="geometry" />
+        </mxCell>
+        <mxCell id="Ouyg0PosjArzcMBJDUIF-1" edge="1" parent="1" source="a5W7ScN4wuMC1Rjc91Gx-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="585" y="465" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-6" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;ul&gt;&lt;li&gt;&lt;font size=&quot;1&quot;&gt;POST/resolveEntrypoint&lt;/font&gt;&lt;/li&gt;&lt;li&gt;findBySubjecktKey&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="160" x="434.5" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-3" edge="1" parent="1" source="a5W7ScN4wuMC1Rjc91Gx-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="a5W7ScN4wuMC1Rjc91Gx-2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-1" parent="1" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.mobile_client;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;div&gt;CLIENT&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="78" width="78" x="379.75" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-5" edge="1" parent="1" source="a5W7ScN4wuMC1Rjc91Gx-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="a5W7ScN4wuMC1Rjc91Gx-4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-2" parent="1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;" value="API GATEWAY&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="78" width="78" x="379.75" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-4" parent="1" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#dae8fc;strokeColor=#6c8ebf;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;prIcon=pod" value="JOURNEY BFF&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="74.88" width="78" x="379" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-7" parent="1" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#dae8fc;strokeColor=#6c8ebf;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;prIcon=pod" value="JOURNEY&lt;div&gt;-RESOLUTION-READ-MODEL&lt;/div&gt;" vertex="1">
+          <mxGeometry height="74.88" width="78" x="379.75" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="a5W7ScN4wuMC1Rjc91Gx-8" edge="1" parent="1" source="a5W7ScN4wuMC1Rjc91Gx-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="a5W7ScN4wuMC1Rjc91Gx-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
