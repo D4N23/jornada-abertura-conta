@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: journey-bff
+ 
+server:
+  port: 8080
+
+journey:
+  read:
+    base-url: ${JOURNEY_READ_BASE_URL:http://journey-resolution-read:8080}
+  subject-key:
+    secret: ${JOURNEY_SUBJECT_KEY_SECRET}
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
