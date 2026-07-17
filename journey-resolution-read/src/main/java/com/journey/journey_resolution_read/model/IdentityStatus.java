@@ -1,6 +1,6 @@
 package com.journey.journey_resolution_read.model;
 
-public enum IdentySatus {
+public enum IdentityStatus {
     UNKNOWN,
     ACTIVE,
     SUSPENDED,
