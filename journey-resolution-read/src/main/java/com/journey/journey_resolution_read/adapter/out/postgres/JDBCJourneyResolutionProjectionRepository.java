@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.journey.journey_resolution_read.model.CustomerStatus;
 import com.journey.journey_resolution_read.model.IdentityStatus;
@@ -20,6 +21,7 @@ import com.journey.journey_resolution_read.model.NextAction;
 import com.journey.journey_resolution_read.model.OnboardingStatus;
 import com.journey.journey_resolution_read.port.out.JourneyResolutionProjectionRepository;
 
+@Repository
 public class JDBCJourneyResolutionProjectionRepository implements JourneyResolutionProjectionRepository{
 
     private final NamedParameterJdbcTemplate template;

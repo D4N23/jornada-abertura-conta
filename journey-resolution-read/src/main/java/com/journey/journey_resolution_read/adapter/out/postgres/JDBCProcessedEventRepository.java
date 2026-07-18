@@ -6,10 +6,12 @@ import java.time.ZoneOffset;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.journey.journey_resolution_read.integrationevent.IntegrationEventMetadata;
 import com.journey.journey_resolution_read.port.out.ProcessedEventRepository;
 
+@Repository
 public class JDBCProcessedEventRepository implements ProcessedEventRepository{
 
 
