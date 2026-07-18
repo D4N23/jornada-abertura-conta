@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record IntegrationEventMetadata(
-    UUID eventID,
+    UUID eventId,
     String eventType,
     String aggregateId,
     long subjectVersion,

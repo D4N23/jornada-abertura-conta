@@ -17,7 +17,7 @@ public record JourneyResolutionProjection(
     NextAction nextAction,
 
     long projectionVersion,
-    Instant updateAt
+    Instant updatedAt
 ) {
     
     public JourneyResolutionProjection withIdentity(
@@ -34,7 +34,7 @@ public record JourneyResolutionProjection(
                 onboardingVersion, 
                 nextAction, 
                 projectionVersion, 
-                updateAt);
+                updatedAt);
     }
 
     public JourneyResolutionProjection withCustomer(
@@ -51,7 +51,7 @@ public record JourneyResolutionProjection(
             onboardingVersion, 
             nextAction, 
             projectionVersion, 
-            updateAt);
+            updatedAt);
     }
 
     public JourneyResolutionProjection withOnboarding(
@@ -68,7 +68,7 @@ public record JourneyResolutionProjection(
             sourceVersion, 
             nextAction, 
             projectionVersion, 
-            updateAt);
+            updatedAt);
     }
 
     public JourneyResolutionProjection resolvedAs(
