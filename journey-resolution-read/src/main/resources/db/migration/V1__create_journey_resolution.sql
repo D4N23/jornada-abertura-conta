@@ -13,7 +13,7 @@ CREATE TABLE journey_resolution(
     next_action VARCHAR(64) NOT NULL,
 
     projection_version BIGINT NOT NULL,
-    update_at TIMESTAMPZ NOT NULL
+    updated_at TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE processed_event(
@@ -26,8 +26,8 @@ CREATE TABLE processed_event(
     subject_key VARCHAR(64) NOT NULL,
     source_version BIGINT NOT NULL,
 
-    occured_at TIMESTAMPZ NOT NULL,
-    processed_at TIMESTAMPZ not null,
+    occurred_at TIMESTAMPTZ NOT NULL,
+    processed_at TIMESTAMPTZ not null,
 
     correlation_id varchar(100),
     schema_version INTEGER NOT NULL

@@ -57,10 +57,10 @@ public class JDBCJourneyResolutionProjectionRepository implements JourneyResolut
     }
 
     @Override
-    public JourneyResolutionProjection lockOrCreate(String sbjectKey, Instant now) {
+    public JourneyResolutionProjection lockOrCreate(String subjectKey, Instant now) {
        var parameters = new MapSqlParameterSource()
-                .addValue(sbjectKey, now)
-                .addValue("update_at", OffsetDateTime.ofInstant(now, ZoneOffset.UTC));
+                .addValue("subjectKey", subjectKey)
+                .addValue("updatedAt", OffsetDateTime.ofInstant(now, ZoneOffset.UTC));
 
        template.update("""
             INSERT INTO journey_resolution (
@@ -123,7 +123,7 @@ public class JDBCJourneyResolutionProjectionRepository implements JourneyResolut
         .addValue("customerVersion", projection.customerVersion())
         .addValue("onboardingStatus", projection.onboardingStatus().name())
         .addValue("onboardingVersion", projection.onboardingVersion())
-        .addValue("nextAction", projection.nextAction())
+        .addValue("nextAction", projection.nextAction().name())
         .addValue("projectionVersion", projection.projectionVersion())
         .addValue("updatedAt", OffsetDateTime.ofInstant(projection.updatedAt(), ZoneOffset.UTC));
 
@@ -167,7 +167,7 @@ public class JDBCJourneyResolutionProjectionRepository implements JourneyResolut
             NextAction.valueOf(resultSet.getString("next_action")),
             resultSet.getLong("projection_version"),
             resultSet.getObject(
-                "update_at", OffsetDateTime.class
+                "updated_at", OffsetDateTime.class
             ).toInstant()
         );
     }

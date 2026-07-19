@@ -23,7 +23,7 @@ public class JDBCProcessedEventRepository implements ProcessedEventRepository{
 
     @Override
     public boolean tryRegister(IntegrationEventMetadata metadata, String subjectKey, Instant processedAt) {
-        
+    
         var parameters = new MapSqlParameterSource()
             .addValue("eventId", metadata.eventId())
             .addValue("eventType", metadata.eventType())
@@ -40,39 +40,38 @@ public class JDBCProcessedEventRepository implements ProcessedEventRepository{
             .addValue("correlationId",metadata.correlationId())
             .addValue("schemaVersion",metadata.schemaVersion());
 
-            int insertedRows = template.update(
-            """
-            INSERT INTO processed_event (
-                event_id,
-                event_type,
-                producer,
-                aggregate_id,
-                subject_key,
-                source_version,
-                occurred_at,
-                processed_at,
-                correlation_id,
-                schema_version
-            )
-            VALUES (
-                :eventId,
-                :eventType,
-                :producer,
-                :aggregateId,
-                :subjectKey,
-                :sourceVersion,
-                :occurredAt,
-                :processedAt,
-                :correlationId,
-                :schemaVersion
-            )
-            ON CONFLICT (event_id) DO NOTHING
-            """,
-            parameters
-        );
+                int insertedRows = template.update(
+                """
+                INSERT INTO processed_event (
+                    event_id,
+                    event_type,
+                    producer,
+                    aggregate_id,
+                    subject_key,
+                    source_version,
+                    occurred_at,
+                    processed_at,
+                    correlation_id,
+                    schema_version
+                )
+                VALUES (
+                    :eventId,
+                    :eventType,
+                    :producer,
+                    :aggregateId,
+                    :subjectKey,
+                    :sourceVersion,
+                    :occurredAt,
+                    :processedAt,
+                    :correlationId,
+                    :schemaVersion
+                )
+                ON CONFLICT (event_id) DO NOTHING
+                """,
+                parameters
+            );
 
-        return insertedRows == 1;
-
+            return insertedRows == 1;   
     }
     
 }
