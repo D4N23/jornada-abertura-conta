@@ -7,7 +7,7 @@ server:
 
 journey:
   read:
-    base-url: ${JOURNEY_READ_BASE_URL:http://journey-resolution-read:8080}
+    base-url: ${JOURNEY_READ_BASE_URL:http://journey-resolution-read:8081}
   subject-key:
     secret: ${JOURNEY_SUBJECT_KEY_SECRET}
     

@@ -1,4 +1,4 @@
-package com.journeys.journey_bff.entrypoint.api
+package com.journeys.journey_bff.entrypoint.api.handle
 
 import com.journeys.journey_bff.error.InvalidCpfException
 import com.journeys.journey_bff.error.JourneyResolutionUnavailableException

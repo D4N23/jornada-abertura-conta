@@ -84,9 +84,9 @@ Exemplo de resposta:
 As ações previstas pelo contrato são:
 
 - `AUTHENTICATION_REQUIRED`: existe uma relação que exige autenticação;
-- `ONBOARDING_RESUME_REQUIRED`: há uma abertura em andamento;
+- `ONBOARDING_RESUME_REQUIRED`: há uma abertura de conta em andamento;
 - `NEW_ONBOARDING_ALLOWED`: não existe jornada anterior e uma nova pode começar;
-- `ONBOARDING_UNAVAIABLE`: a abertura não está disponível para o estado encontrado.
+- `ONBOARDING_UNAVAIABLE`: a abertura não está disponível para a chave identificadora enviada.
 
 ## Tratamento de erros
 
