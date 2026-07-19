@@ -1,0 +1,161 @@
+name: account-opening-local
+
+services:
+  journey-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-journey_resolution}
+      POSTGRES_USER: ${POSTGRES_USER:-journey}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-journey}
+    ports:
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
+    volumes:
+      - journey-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U ${POSTGRES_USER:-journey} -d ${POSTGRES_DB:-journey_resolution}
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - account-opening
+
+  kafka:
+    image: apache/kafka:4.1.2
+    hostname: kafka
+    environment:
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,CONTROLLER://0.0.0.0:29093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:${KAFKA_HOST_PORT:-9092}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 1
+    ports:
+      - "${KAFKA_HOST_PORT:-9092}:9092"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:29092 --list >/dev/null 2>&1
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 15s
+    networks:
+      - account-opening
+
+  kafka-init:
+    image: apache/kafka:4.1.2
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint:
+      - /bin/sh
+      - -ec
+      - |
+        /opt/kafka/bin/kafka-topics.sh \
+          --bootstrap-server kafka:29092 \
+          --create --if-not-exists \
+          --topic identity.lifecycle.v1 \
+          --partitions 1 \
+          --replication-factor 1
+
+        /opt/kafka/bin/kafka-topics.sh \
+          --bootstrap-server kafka:29092 \
+          --create --if-not-exists \
+          --topic customer.lifecycle.v1 \
+          --partitions 1 \
+          --replication-factor 1
+
+        /opt/kafka/bin/kafka-topics.sh \
+          --bootstrap-server kafka:29092 \
+          --create --if-not-exists \
+          --topic onboarding.lifecycle.v1 \
+          --partitions 1 \
+          --replication-factor 1
+
+        /opt/kafka/bin/kafka-topics.sh \
+          --bootstrap-server kafka:29092 \
+          --list
+    restart: "no"
+    networks:
+      - account-opening
+
+  journey-resolution-read:
+    build:
+      context: ${JOURNEY_READ_CONTEXT:-./journey-resolution-read}
+    environment:
+      DATABASE_URL: jdbc:postgresql://journey-postgres:5432/${POSTGRES_DB:-journey_resolution}
+      DATABASE_USERNAME: ${POSTGRES_USER:-journey}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-journey}
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      KAFKA_CONSUMER_GROUP_ID: journey-resolution-read-v1
+      IDENTITY_TOPIC: identity.lifecycle.v1
+      CUSTOMER_TOPIC: customer.lifecycle.v1
+      ONBOARDING_TOPIC: onboarding.lifecycle.v1
+    ports:
+      - "${JOURNEY_READ_HOST_PORT:-8081}:8081"
+    depends_on:
+      journey-postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl --fail --silent http://localhost:8081/actuator/health/readiness >/dev/null
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    networks:
+      - account-opening
+
+  journey-bff:
+    build:
+      context: ${JOURNEY_BFF_CONTEXT:-./journey-bff}
+    environment:
+      JOURNEY_READ_BASE_URL: http://journey-resolution-read:8081
+      JOURNEY_SUBJECT_KEY_SECRET: ${JOURNEY_SUBJECT_KEY_SECRET:-local-development-secret-change-me}
+      SERVER_PORT: 8080
+    ports:
+      - "${JOURNEY_BFF_HOST_PORT:-8080}:8080"
+    depends_on:
+      journey-resolution-read:
+        condition: service_healthy
+    networks:
+      - account-opening
+
+  account-opening-mfe:
+    build:
+      context: ${FRONTEND_CONTEXT:-./account-opening-mfe}
+      args:
+        NEXT_PUBLIC_JOURNEY_API_URL: ${NEXT_PUBLIC_JOURNEY_API_URL:-http://localhost:8080}
+    environment:
+      NEXT_PUBLIC_JOURNEY_API_URL: ${NEXT_PUBLIC_JOURNEY_API_URL:-http://localhost:8080}
+    ports:
+      - "${FRONTEND_HOST_PORT:-3000}:3000"
+    depends_on:
+      - journey-bff
+    networks:
+      - account-opening
+
+networks:
+  account-opening:
+    name: account-opening-local
+
+volumes:
+  journey-postgres-data:
+  kafka-data:

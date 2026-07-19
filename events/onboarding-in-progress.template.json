@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "eventId": "b04c0fe3-f3c4-4f42-b95e-45000dbdd002",
+    "eventType": "OnboardingStatusChanged",
+    "aggregateId": "82ac405a-e260-4d2c-b6c5-1779ab0d1002",
+    "subjectVersion": 1,
+    "occurredAt": "2026-07-18T20:00:00Z",
+    "correlationId": "7b5f413d-73a1-4924-92b8-94405b752002",
+    "producer": "onboarding-service-test-fixture",
+    "schemaVersion": 1
+  },
+  "subjectKey": "__SUBJECT_KEY__",
+  "status": "IN_PROGRESS"
+}
