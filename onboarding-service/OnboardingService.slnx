@@ -8,5 +8,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/OnboardingService.Application.Tests/OnboardingService.Application.Tests.csproj" />
     <Project Path="tests/OnboardingService.Domain.Tests/OnboardingService.Domain.Tests.csproj" />
+    <Project Path="tests/OnboardingService.Infrastructure.Tests/OnboardingService.Infrastructure.Tests.csproj" />
   </Folder>
 </Solution>
