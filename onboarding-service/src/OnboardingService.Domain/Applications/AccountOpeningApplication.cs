@@ -37,7 +37,7 @@ public sealed class AccountOpeningApplication
         SubjectKey subjectKey,
         CorrelationId correlationId,
         DateTimeOffset now,
-        int expirantionDays = 30
+        int expirationDays = 30
     )
     {
         var occurredAt = now.ToUniversalTime();
@@ -50,7 +50,7 @@ public sealed class AccountOpeningApplication
             CurrentStep = JourneyStep.Introduction,
             Expiration = ApplicationExpiration.InDays(
                 occurredAt,
-                expirantionDays
+                expirationDays
             ),
             Version = 1,
             CreatedAt = occurredAt,

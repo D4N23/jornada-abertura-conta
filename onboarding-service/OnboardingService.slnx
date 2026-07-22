@@ -5,4 +5,7 @@
     <Project Path="src/OnboardingService.Domain/OnboardingService.Domain.csproj" />
     <Project Path="src/OnboardingService.Infrastructure/OnboardingService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OnboardingService.Domain.Tests/OnboardingService.Domain.Tests.csproj" />
+  </Folder>
 </Solution>
