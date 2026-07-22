@@ -1,5 +1,5 @@
-using System.Data.Common;
 using OnboardingService.Domain.Applications.Events;
+using OnboardingService.Domain.Applications.Exceptions;
 using OnboardingService.Domain.Applications.ValueObjects;
 using ApplicationId = OnboardingService.Domain.Applications.ValueObjects.ApplicationId;
 
@@ -71,6 +71,61 @@ public sealed class AccountOpeningApplication
         );
 
         return application;
+    }
+
+
+    public void Submit(
+        CorrelationId correlationId,
+        DateTimeOffset now
+    )
+    {
+        var occurredAt = now.ToUniversalTime();
+
+        EnsureNotExpired(occurredAt);
+        EnsureCanSubmit();
+
+        Status = ApplicationStatus.PersonalDataPending;
+        CurrentStep = JourneyStep.PersonalData;
+        Version++;
+        UpdatedAt = occurredAt;
+
+        RaiseDomainEvent(
+            new ApplicationSubmitted(
+                 EventId: Guid.NewGuid(),
+                ApplicationId: Id,
+                SubjectKey: SubjectKey,
+                Status: Status,
+                CurrentStep: CurrentStep,
+                ApplicationVersion: Version,
+                CorrelationId: correlationId,
+                OccurredAt: occurredAt
+            )
+        );
+    }
+
+    private void EnsureCanSubmit()
+    {
+        var isValidState = Status == ApplicationStatus.Started && CurrentStep == JourneyStep.Introduction;
+
+        if (!isValidState)
+        {
+            throw new ApplicationTransitionNotAllowedException(
+                operation: nameof(Submit),
+                currentStatus: Status,
+                currentStep: CurrentStep
+            );
+        }
+    }
+
+    private void EnsureNotExpired(DateTimeOffset instant)
+    {
+        if(Expiration.IsExpiredAt(instant))
+        {
+            throw new ApplicationExpiredException(
+                applicationId: Id,
+                expiresAt: Expiration.ExpiresAt
+            );
+        }
     }
 
     public void ClearDomainEvents()

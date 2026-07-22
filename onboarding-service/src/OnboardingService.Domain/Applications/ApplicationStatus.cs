@@ -4,7 +4,7 @@ public enum ApplicationStatus
 {
     Started,
     ContractVerificationPending,
-    PersonalDatatPeding,
+    PersonalDataPending,
     DocumentsPending,
     KycPending,
     FraudAnalysisPending,
