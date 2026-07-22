@@ -3,7 +3,7 @@ using ApplicationId = OnboardingService.Domain.Applications.ValueObjects.Applica
 
 namespace OnboardingService.Domain.Applications.Events;
 
-public sealed record ApplicationSubmitted(
+public sealed record ApplicantDataRecorded(
     Guid EventId,
     ApplicationId ApplicationId,
     SubjectKey SubjectKey,
@@ -12,4 +12,4 @@ public sealed record ApplicationSubmitted(
     long ApplicationVersion,
     CorrelationId CorrelationId,
     DateTimeOffset OccurredAt
-) : IDomainEvent;
+): IDomainEvent;

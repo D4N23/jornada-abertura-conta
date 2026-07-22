@@ -3,7 +3,7 @@ namespace OnboardingService.Domain.Applications;
 public enum ApplicationStatus
 {
     Started,
-    ContractVerificationPending,
+    ContactVerificationPending,
     PersonalDataPending,
     DocumentsPending,
     KycPending,

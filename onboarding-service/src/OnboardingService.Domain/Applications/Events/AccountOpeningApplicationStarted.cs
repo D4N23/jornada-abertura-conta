@@ -12,7 +12,4 @@ JourneyStep CurrentStep,
 long ApplicationVersion,
 CorrelationId CorrelationId,
 DateTimeOffset OccurredAt
-) : IDomainEvent
-{
-    public DateTimeOffset OccurretAt => throw new NotImplementedException();
-}
+) : IDomainEvent;

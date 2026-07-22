@@ -30,6 +30,8 @@ public sealed class AccountOpeningApplication
 
     public DateTimeOffset UpdatedAt { get; private set;}
 
+    public ApplicantDraft? ApplicantDraft { get; private set; }
+
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     public static AccountOpeningApplication Start(
@@ -73,7 +75,6 @@ public sealed class AccountOpeningApplication
         return application;
     }
 
-
     public void Submit(
         CorrelationId correlationId,
         DateTimeOffset now
@@ -101,6 +102,56 @@ public sealed class AccountOpeningApplication
                 OccurredAt: occurredAt
             )
         );
+    }
+
+    public void RecordApplicantData(
+        ApplicantDraft applicantDraft,
+        CorrelationId correlationId,
+        DateTimeOffset now
+    )
+    {
+        ArgumentNullException.ThrowIfNull(applicantDraft);
+
+        var occurredAt = now.ToUniversalTime();
+
+        EnsureNotExpired(occurredAt);
+        EnsureCanRecordApplicantData();
+
+        ApplicantDraft = applicantDraft;
+        Status = ApplicationStatus.ContactVerificationPending;
+        CurrentStep = JourneyStep.ContactVerification;
+
+        Version++;
+        UpdatedAt = occurredAt;
+
+        RaiseDomainEvent(
+            new ApplicantDataRecorded(
+                EventId: Guid.NewGuid(),
+                ApplicationId: Id,
+                SubjectKey: SubjectKey,
+                Status: Status,
+                CurrentStep: CurrentStep,
+                ApplicationVersion: Version,
+                CorrelationId: correlationId,
+                OccurredAt: occurredAt
+            )
+        );
+    }
+
+    private void EnsureCanRecordApplicantData()
+    {
+        var isValidState =
+            Status == ApplicationStatus.PersonalDataPending
+            && CurrentStep == JourneyStep.PersonalData;
+
+        if (!isValidState)
+        {
+            throw new ApplicationTransitionNotAllowedException(
+                operation: nameof(RecordApplicantData),
+                currentStatus: Status,
+                currentStep: CurrentStep
+            );
+        }
     }
 
     private void EnsureCanSubmit()

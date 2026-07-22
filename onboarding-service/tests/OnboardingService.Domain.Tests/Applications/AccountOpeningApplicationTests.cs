@@ -434,4 +434,246 @@ public sealed class AccountOpeningApplicationTests
 
         Assert.Empty(application.DomainEvents);
     }
+
+    private static ApplicantDraft CreateApplicantDraft(
+       DateOnly today
+    )
+    {
+        return new ApplicantDraft(
+            FullName: FullName.From(
+                "Danilo Sampaio"
+            ),
+            BirthDate: BirthDate.From(
+                value: new DateOnly(
+                    year: 1995,
+                    month: 1,
+                    day: 15
+                ),
+                today: today
+            ),
+            Email: EmailAddress.From(
+                "danilo@example.com"
+            ),
+            Phone: PhoneNumber.From(
+                "11999999999"
+            )
+        );
+    }
+
+    [Fact]
+    public void RecordApplicantData_ShouldMoveToContactVerification()
+    {
+        var createdAt = new DateTimeOffset(
+            year: 2026,
+            month: 7,
+            day: 22,
+            hour: 12,
+            minute: 0,
+            second: 0,
+            offset: TimeSpan.Zero
+        );
+
+        var submittedAt = createdAt.AddMinutes(1);
+        var recordedAt = createdAt.AddMinutes(5);
+
+        var application =
+            AccountOpeningApplication.Start(
+                applicantCpf: Cpf.From(
+                    "529.982.247-25"
+                ),
+                subjectKey: SubjectKey.From(
+                    "subject-key-example"
+                ),
+                correlationId: CorrelationId.New(),
+                now: createdAt
+            );
+
+        application.Submit(
+            correlationId: CorrelationId.New(),
+            now: submittedAt
+        );
+
+        var applicantDraft = CreateApplicantDraft(
+            today: DateOnly.FromDateTime(
+                recordedAt.UtcDateTime
+            )
+        );
+
+        application.RecordApplicantData(
+            applicantDraft: applicantDraft,
+            correlationId: CorrelationId.New(),
+            now: recordedAt
+        );
+
+        Assert.Equal(
+            applicantDraft,
+            application.ApplicantDraft
+        );
+
+        Assert.Equal(
+            ApplicationStatus.ContactVerificationPending,
+            application.Status
+        );
+
+        Assert.Equal(
+            JourneyStep.ContactVerification,
+            application.CurrentStep
+        );
+
+        Assert.Equal(
+            3,
+            application.Version
+        );
+
+        Assert.Equal(
+            recordedAt,
+            application.UpdatedAt
+        );
+    }
+
+    [Fact]
+    public void RecordApplicantData_ShouldRaiseApplicantDataRecordedEvent()
+    {
+        var createdAt = new DateTimeOffset(
+            year: 2026,
+            month: 7,
+            day: 22,
+            hour: 12,
+            minute: 0,
+            second: 0,
+            offset: TimeSpan.Zero
+        );
+
+        var recordedAt = createdAt.AddMinutes(5);
+
+        var application =
+            AccountOpeningApplication.Start(
+                applicantCpf: Cpf.From(
+                    "529.982.247-25"
+                ),
+                subjectKey: SubjectKey.From(
+                    "subject-key-example"
+                ),
+                correlationId: CorrelationId.New(),
+                now: createdAt
+            );
+
+        application.Submit(
+            correlationId: CorrelationId.New(),
+            now: createdAt.AddMinutes(1)
+        );
+
+        application.ClearDomainEvents();
+
+        var correlationId = CorrelationId.From(
+            "record-applicant-data-correlation"
+        );
+
+        application.RecordApplicantData(
+            applicantDraft: CreateApplicantDraft(
+                today: DateOnly.FromDateTime(
+                    recordedAt.UtcDateTime
+                )
+            ),
+            correlationId: correlationId,
+            now: recordedAt
+        );
+
+        var domainEvent = Assert.Single(
+            application.DomainEvents
+        );
+
+        var applicantDataRecorded =
+            Assert.IsType<ApplicantDataRecorded>(
+                domainEvent
+            );
+
+        Assert.Equal(
+            application.Id,
+            applicantDataRecorded.ApplicationId
+        );
+
+        Assert.Equal(
+            ApplicationStatus.ContactVerificationPending,
+            applicantDataRecorded.Status
+        );
+
+        Assert.Equal(
+            JourneyStep.ContactVerification,
+            applicantDataRecorded.CurrentStep
+        );
+
+        Assert.Equal(
+            3,
+            applicantDataRecorded.ApplicationVersion
+        );
+
+        Assert.Equal(
+            correlationId,
+            applicantDataRecorded.CorrelationId
+        );
+
+        Assert.Equal(
+            recordedAt,
+            applicantDataRecorded.OccurredAt
+        );
+    }
+
+    [Fact]
+    public void RecordApplicantData_ShouldRejectWhenIntroductionWasNotSubmitted()
+    {
+        var now = new DateTimeOffset(
+            year: 2026,
+            month: 7,
+            day: 22,
+            hour: 12,
+            minute: 0,
+            second: 0,
+            offset: TimeSpan.Zero
+        );
+
+        var application =
+            AccountOpeningApplication.Start(
+                applicantCpf: Cpf.From(
+                    "529.982.247-25"
+                ),
+                subjectKey: SubjectKey.From(
+                    "subject-key-example"
+                ),
+                correlationId: CorrelationId.New(),
+                now: now
+            );
+
+        var applicantDraft = CreateApplicantDraft(
+            today: DateOnly.FromDateTime(
+                now.UtcDateTime
+            )
+        );
+
+        var exception =
+            Assert.Throws<ApplicationTransitionNotAllowedException>(
+                () => application.RecordApplicantData(
+                    applicantDraft: applicantDraft,
+                    correlationId: CorrelationId.New(),
+                    now: now.AddMinutes(1)
+                )
+            );
+
+        Assert.Equal(
+            ApplicationStatus.Started,
+            exception.CurrentStatus
+        );
+
+        Assert.Equal(
+            JourneyStep.Introduction,
+            exception.CurrentStep
+        );
+
+        Assert.Null(application.ApplicantDraft);
+
+        Assert.Equal(
+            1,
+            application.Version
+        );
+    }
 }
