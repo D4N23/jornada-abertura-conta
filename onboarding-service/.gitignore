@@ -1,0 +1,32 @@
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# VS Code local
+.vscode/
+
+# Tests and coverage
+TestResults/
+coverage/
+coverage-report/
+
+# Logs
+*.log
+logs/
+
+# Local environment variables
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
