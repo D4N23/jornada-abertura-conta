@@ -8,6 +8,8 @@ public readonly record struct BirthDate
     {
         Value = value;
     }
+
+    //valida uma nova entrada
     public static BirthDate From(
         DateOnly value,
         DateOnly today
@@ -22,6 +24,15 @@ public readonly record struct BirthDate
         }
         return new BirthDate(value);
     }
+
+    //reconstrói um dado persistido
+    internal static BirthDate Rehydrate(
+        DateOnly value
+    )
+    {
+        return new BirthDate(value);
+    }
+
     public override string ToString()
     {
       return Value.ToString("yyyy-MM-dd");

@@ -138,6 +138,50 @@ public sealed class AccountOpeningApplication
         );
     }
 
+    internal static AccountOpeningApplication Rehydrate(
+        ApplicationId id,
+        SubjectKey subjectKey,
+        Cpf applicantCpf,
+        ApplicationStatus status,
+        JourneyStep currentStep,
+        ApplicationExpiration expiration,
+        ApplicantDraft? applicantDraft,
+        long version,
+        DateTimeOffset createdAt,
+        DateTimeOffset updatedAt
+    )
+    {
+        if (version < 1)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(version),
+                "Application version must be at least 1."
+            );
+        }
+
+        if (updatedAt < createdAt)
+        {
+            throw new ArgumentException(
+                "UpdatedAt cannot be earlier than CreatedAt.",
+                nameof(updatedAt)
+            );
+        }
+
+        return new AccountOpeningApplication
+        {
+            Id = id,
+            SubjectKey = subjectKey,
+            ApplicantCpf = applicantCpf,
+            Status = status,
+            CurrentStep = currentStep,
+            Expiration = expiration,
+            ApplicantDraft = applicantDraft,
+            Version = version,
+            CreatedAt = createdAt,
+            UpdatedAt = updatedAt
+        };
+    }
+
     private void EnsureCanRecordApplicantData()
     {
         var isValidState =
