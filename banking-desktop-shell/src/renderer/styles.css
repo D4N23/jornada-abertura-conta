@@ -204,3 +204,101 @@ body {
     animation-duration: 1800ms;
   }
 }
+
+.state-card {
+  padding: 28px;
+
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 28px;
+
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 24px 60px rgba(32, 33, 48, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.state-card h1 {
+  margin: 12px 0 0;
+
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.state-card p {
+  margin: 16px 0 0;
+
+  color: #646875;
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.state-label {
+  color: #5138ee;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.error-card .state-label {
+  color: #b3261e;
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 48px;
+
+  margin-top: 24px;
+  padding: 12px 20px;
+
+  border: 0;
+  border-radius: 14px;
+
+  color: #ffffff;
+  background: #5138ee;
+
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  filter: brightness(0.95);
+}
+
+.primary-button:focus-visible {
+  outline: 3px solid rgba(81, 56, 238, 0.3);
+  outline-offset: 3px;
+}
+
+.device-information {
+  display: grid;
+  gap: 12px;
+
+  margin: 24px 0 0;
+}
+
+.device-information div {
+  padding: 14px;
+
+  border-radius: 14px;
+
+  background: #f3f1ff;
+}
+
+.device-information dt {
+  color: #747887;
+
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.device-information dd {
+  overflow-wrap: anywhere;
+
+  margin: 6px 0 0;
+
+  font-size: 12px;
+  font-weight: 600;
+}
